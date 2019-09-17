@@ -7,7 +7,7 @@ public class LoginConverter {
 
     public static LoginResponse toVo(final User user) {
         return LoginResponse.builder()
-                .id(user.getCpf())
+                .id(user.getId())
                 .build();
     }
 }

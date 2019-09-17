@@ -3,5 +3,6 @@ package domain;
 public enum UserStatus {
     NORMAL,
     BLOCKED,
-    DELETED
+    DELETED,
+    ADMIN
 }
