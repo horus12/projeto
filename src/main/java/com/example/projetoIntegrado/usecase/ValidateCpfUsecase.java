@@ -8,9 +8,9 @@ import java.util.InputMismatchException;
 
 @Service
 @Transactional
-public class ValidateCpfUseCse {
+public class ValidateCpfUsecase {
 
-    public ValidateCpfUseCse() {
+    public ValidateCpfUsecase() {
 
     }
 

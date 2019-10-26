@@ -1,24 +1,25 @@
 package com.example.projetoIntegrado.usecase;
 
-import com.example.projetoIntegrado.exeception.ExeceptionUserAlreadyRegister;
 import com.example.projetoIntegrado.exeception.GenericExeption;
 import com.example.projetoIntegrado.exeception.NotFoundException;
+import domain.ProviderRepository;
 import domain.User;
 import domain.UserRepository;
 import domain.UserStatus;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class LoginUseCse {
+@Data
+public class LoginUsecase {
     private final UserRepository userRepository;
+    private final ProviderRepository providerRepository;
 
-    public LoginUseCse(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
-    public User execute(final String cpf, final String senha) {
+    //TODO --  Refactor login by Username
+    public User execute(final String cpf, final String senha) throws NotFoundException {
 
         User user = userRepository.findByCpf(cpf);
 

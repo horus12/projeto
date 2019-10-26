@@ -1,7 +1,7 @@
 package com.example.projetoIntegrado.usecase;
 
 import com.example.projetoIntegrado.exeception.ExeceptionUserAlreadyRegister;
-import com.example.projetoIntegrado.request.CreateUserModel;
+import com.example.projetoIntegrado.request.CreateUser;
 import domain.LoginState;
 import domain.User;
 import domain.UserRepository;
@@ -14,28 +14,28 @@ import java.time.LocalDate;
 
 @Service
 @Transactional
-public class NewUserUseCase {
+public class CreateUserUsecase {
 
     private final UserRepository userRepository;
-    private final ValidateCpfUseCse validateCpfUseCse;
+    private final ValidateCpfUsecase validateCpfUsecase;
 
-    public NewUserUseCase(UserRepository userRepository,
-                          ValidateCpfUseCse validateCpfUseCse) {
+    public CreateUserUsecase(UserRepository userRepository,
+                             ValidateCpfUsecase validateCpfUsecase) {
         this.userRepository = userRepository;
-        this.validateCpfUseCse = validateCpfUseCse;
+        this.validateCpfUsecase = validateCpfUsecase;
     }
 
-    public User execute(final CreateUserModel request) {
+    public User execute(final CreateUser request) {
         Assert.hasText(request.getUserName(), "UserName should not be null or empty");
         Assert.hasText(request.getCpf(), "cpf should not be null or empty");
         Assert.hasText(request.getRg(), "RG should not be null or empty");
         Assert.hasText(request.getSenha(), "Password should not be null or empty");
 
 
-        if (validateCpfUseCse.execute(request.getCpf()) != LoginState.VALID)
+        if (validateCpfUsecase.execute(request.getCpf()) != LoginState.VALID)
             throw new IllegalArgumentException("invalid cpf");
 
-        String cpf = validateCpfUseCse.removeCaracteresEspeciais(request.getCpf());
+        String cpf = validateCpfUsecase.removeCaracteresEspeciais(request.getCpf());
 
         User userInRepo = userRepository.findByCpf(cpf);
         if (userInRepo != null)
@@ -46,7 +46,7 @@ public class NewUserUseCase {
         user.setCpf(cpf);
         user.setSenha(request.getSenha());
         user.setCreatedDate(LocalDate.now());
-        user.setRg(validateCpfUseCse.removeCaracteresEspeciais(request.getRg()));
+        user.setRg(validateCpfUsecase.removeCaracteresEspeciais(request.getRg()));
         user.setStatus(UserStatus.NORMAL);
         userRepository.save(user);
         return user;
