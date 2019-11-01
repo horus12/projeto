@@ -1,7 +1,7 @@
 package com.example.projetoIntegrado.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import domain.LoginState;
+import domain.UserState;
 import lombok.*;
 
 @Getter
@@ -12,8 +12,7 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ValidateResponse {
 
-
-    private LoginState type;
+    private UserState type;
 
     @Override
     public String toString() {

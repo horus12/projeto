@@ -1,6 +1,6 @@
 package com.example.projetoIntegrado.usecase;
 
-import domain.LoginState;
+import domain.UserState;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,17 +10,13 @@ import java.util.InputMismatchException;
 @Transactional
 public class ValidateCpfUsecase {
 
-    public ValidateCpfUsecase() {
-
-    }
-
-    public LoginState execute(String CPF) {
+    public UserState execute(String CPF) {
 
         CPF = removeCaracteresEspeciais(CPF);
 
         // considera-se erro CPF's formados por uma sequencia de numeros iguais
         if (CPF.equals("00000000000") || CPF.equals("11111111111") || CPF.equals("22222222222") || CPF.equals("33333333333") || CPF.equals("44444444444") || CPF.equals("55555555555") || CPF.equals("66666666666") || CPF.equals("77777777777") || CPF.equals("88888888888") || CPF.equals("99999999999") || (CPF.length() != 11))
-            return (LoginState.INVALID);
+            return (UserState.INVALID);
 
         char dig10, dig11;
         int sm, i, r, num, peso;
@@ -62,11 +58,11 @@ public class ValidateCpfUsecase {
 
             // Verifica se os digitos calculados conferem com os digitos informados.
             if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
-                return (LoginState.VALID);
+                return (UserState.VALID);
             else
-                return (LoginState.INVALID);
+                return (UserState.INVALID);
         } catch (InputMismatchException erro) {
-            return (LoginState.INVALID);
+            return (UserState.INVALID);
         }
     }
 

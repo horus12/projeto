@@ -1,12 +1,11 @@
 package com.example.projetoIntegrado.converter;
 
 import com.example.projetoIntegrado.response.ValidateResponse;
-import domain.LoginState;
+import domain.UserState;
 
 public class ValidateCpfConverter {
 
-    public static ValidateResponse toVo(final LoginState type) {
-        ValidateResponse validateResponse = ValidateResponse.builder().type(type).build();
-        return validateResponse;
+    public static ValidateResponse toVo(final UserState userState) {
+        return ValidateResponse.builder().type(userState).build();
     }
 }

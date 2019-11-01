@@ -2,7 +2,6 @@ package com.example.projetoIntegrado.http;
 
 import com.example.projetoIntegrado.converter.LoginConverter;
 import com.example.projetoIntegrado.converter.ValidateCpfConverter;
-import com.example.projetoIntegrado.exeception.NotFoundException;
 import com.example.projetoIntegrado.request.CreateProvider;
 import com.example.projetoIntegrado.request.CreateUser;
 import com.example.projetoIntegrado.request.Login;
@@ -12,7 +11,7 @@ import com.example.projetoIntegrado.usecase.CreateProviderUsecase;
 import com.example.projetoIntegrado.usecase.CreateUserUsecase;
 import com.example.projetoIntegrado.usecase.LoginUsecase;
 import com.example.projetoIntegrado.usecase.ValidateCpfUsecase;
-import domain.LoginState;
+import domain.UserState;
 import domain.Provider;
 import domain.User;
 import lombok.Data;
@@ -33,21 +32,10 @@ public class Controller {
     private final CreateProviderUsecase createProviderUsecase;
     private final ValidateCpfUsecase validateCpfUsecase;
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/Login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LoginResponse Login(@RequestBody Login login) {
 
-        //TODO -- Call Provider Login
-        try {
-
-            User user = loginUsecase.execute(login.getCpf(), login.getSenha());
-            return return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NotFoundException ex) {
-            //TODO -- Create Provider Usecase
-            Provider provider = loginUsecase.execute(login.getCpf(), login.getSenha());
-        }
-
-
-        return LoginConverter.toVo();
+        return LoginConverter.toVo(loginUsecase.execute(login.getUserName(), login.getSenha()));
     }
 
     @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -77,7 +65,7 @@ public class Controller {
     public ResponseEntity<ValidateResponse> ValidateCpf(@PathVariable(value = "cpf") String cpf) {
 
         final ValidateResponse validateResponse = ValidateCpfConverter.toVo(validateCpfUsecase.execute(cpf));
-        if (validateResponse.getType() == LoginState.INVALID)
+        if (validateResponse.getType() == UserState.INVALID)
             return new ResponseEntity<>(validateResponse, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(validateResponse, HttpStatus.OK);
     }

@@ -1,7 +1,7 @@
 package domain;
 
 
-public enum LoginState {
+public enum UserState {
     VALID,
     INVALID
 }
