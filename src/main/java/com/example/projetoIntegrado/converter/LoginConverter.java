@@ -9,6 +9,7 @@ public class LoginConverter {
     public static LoginResponse toVo(final LoginState login) {
         return LoginResponse.builder()
                 .id(login.getId())
+                .role(login.getRole())
                 .build();
     }
 }
