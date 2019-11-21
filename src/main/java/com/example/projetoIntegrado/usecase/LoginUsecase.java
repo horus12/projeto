@@ -19,7 +19,6 @@ import static com.example.projetoIntegrado.domain.UserRole.PROVIDER;
 import static com.example.projetoIntegrado.domain.UserRole.USER;
 
 @Service
-@Transactional
 @Data
 @RequiredArgsConstructor
 public class LoginUsecase {
@@ -30,7 +29,7 @@ public class LoginUsecase {
 
         LoginState loginState = new LoginState();
 
-        Optional<User> userBd = userRepository.findByName(name);
+        Optional<User> userBd = userRepository.findByUserName(name);
         if (userBd.isPresent()) {
             loginState.setRole(USER);
             User user = userBd.get();
@@ -42,7 +41,7 @@ public class LoginUsecase {
             else
                 loginState.setUserName(user.getUserName());
         } else {
-            Optional<Provider> providerBd = providerRepository.findByName(name);
+            Optional<Provider> providerBd = providerRepository.findByUserName(name);
             if (providerBd.isPresent()) {
                 loginState.setRole(PROVIDER);
                 Provider provider = providerBd.get();

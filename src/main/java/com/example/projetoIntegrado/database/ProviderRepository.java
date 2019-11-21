@@ -10,6 +10,6 @@ public interface ProviderRepository {
 
     Optional<Provider> findByCpf(String cpf);
 
-    Optional<Provider> findByName(String name);
+    Optional<Provider> findByUserName(String name);
 
 }
