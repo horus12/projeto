@@ -1,19 +1,20 @@
 package com.example.projetoIntegrado.http;
 
 import com.example.projetoIntegrado.converter.LoginConverter;
+import com.example.projetoIntegrado.converter.ServiceConverter;
 import com.example.projetoIntegrado.converter.ValidateCpfConverter;
 import com.example.projetoIntegrado.request.CreateProvider;
 import com.example.projetoIntegrado.request.CreateUser;
 import com.example.projetoIntegrado.request.Login;
+import com.example.projetoIntegrado.request.ServiceRequest;
 import com.example.projetoIntegrado.response.LoginResponse;
+import com.example.projetoIntegrado.response.ServiceResponse;
 import com.example.projetoIntegrado.response.ValidateResponse;
-import com.example.projetoIntegrado.usecase.CreateProviderUsecase;
-import com.example.projetoIntegrado.usecase.CreateUserUsecase;
-import com.example.projetoIntegrado.usecase.LoginUsecase;
-import com.example.projetoIntegrado.usecase.ValidateCpfUsecase;
-import domain.UserState;
+import com.example.projetoIntegrado.usecase.*;
 import domain.Provider;
+import domain.ServiceDomain;
 import domain.User;
+import domain.UserState;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,12 +26,14 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/")
 @Data
+@CrossOrigin
 public class Controller {
 
     private final LoginUsecase loginUsecase;
     private final CreateUserUsecase createUserUseCase;
     private final CreateProviderUsecase createProviderUsecase;
     private final ValidateCpfUsecase validateCpfUsecase;
+    private final AskForProviderUsecase askForProviderUsecase;
 
     @PostMapping(value = "/Login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LoginResponse Login(@RequestBody Login login) {
@@ -68,6 +71,16 @@ public class Controller {
         if (validateResponse.getType() == UserState.INVALID)
             return new ResponseEntity<>(validateResponse, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(validateResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/services", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity ServiceRequest(@RequestBody ServiceRequest serviceRequest) {
+        final ServiceDomain serviceDomain = ServiceConverter.converter(serviceRequest);
+        ServiceDomain service = askForProviderUsecase.execute(serviceDomain);
+        if (service == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
