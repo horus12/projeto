@@ -3,7 +3,6 @@ package com.example.projetoIntegrado.http;
 import com.example.projetoIntegrado.converter.LoginConverter;
 import com.example.projetoIntegrado.converter.ServiceConverter;
 import com.example.projetoIntegrado.converter.ValidateCpfConverter;
-import com.example.projetoIntegrado.exeception.ExeceptionUserAlreadyRegister;
 import com.example.projetoIntegrado.request.CreateProvider;
 import com.example.projetoIntegrado.request.CreateUser;
 import com.example.projetoIntegrado.request.Login;
@@ -25,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/user")
-@CrossOrigin
+@RequestMapping(value = "/")
 @Data
 @CrossOrigin
 public class Controller {
