@@ -34,12 +34,12 @@ public class CreateUserUsecase {
         Assert.hasText(request.getSenha(), "Password should not be null or empty");
 
         if (validateCpfUsecase.execute(request.getCpf()) != UserState.VALID)
-            throw new IllegalArgumentException("invalid cpf");
+            throw new IllegalArgumentException("invalid_cpf");
 
         String cpf = validateCpfUsecase.removeCaracteresEspeciais(request.getCpf());
 
         Optional<User> userInRepo = userRepository.findByCpf(cpf);
-        if (userInRepo.isPresent()) throw new ExeceptionUserAlreadyRegister("user already exist");
+        if (userInRepo.isPresent()) throw new ExeceptionUserAlreadyRegister("user_already_exist");
 
         final User user = new User();
         user.setUserName(request.getUserName());

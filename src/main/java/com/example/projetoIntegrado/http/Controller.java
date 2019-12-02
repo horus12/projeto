@@ -3,6 +3,7 @@ package com.example.projetoIntegrado.http;
 import com.example.projetoIntegrado.converter.LoginConverter;
 import com.example.projetoIntegrado.converter.ServiceConverter;
 import com.example.projetoIntegrado.converter.ValidateCpfConverter;
+import com.example.projetoIntegrado.exeception.ExeceptionUserAlreadyRegister;
 import com.example.projetoIntegrado.request.CreateProvider;
 import com.example.projetoIntegrado.request.CreateUser;
 import com.example.projetoIntegrado.request.Login;
@@ -24,7 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/user")
+@CrossOrigin
 @Data
 @CrossOrigin
 public class Controller {
@@ -44,8 +46,16 @@ public class Controller {
     @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<HttpStatus> CreateUser(@RequestBody @Valid CreateUser createUser) {
 
-        final User user = createUserUseCase.execute(createUser);
-
+         User user= null ;
+        try {
+              user = createUserUseCase.execute(createUser);
+        }catch(Exception e){
+            if(e.getMessage().equals("user_already_exist"))
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            if(e.getMessage().equals("invalid_cpf"))
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         if (user != null) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
