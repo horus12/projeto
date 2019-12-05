@@ -1,16 +1,16 @@
 package com.example.projetoIntegrado.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Builder
 public class ServiceResponse {
-
 
     private String providerName;
 
@@ -21,16 +21,5 @@ public class ServiceResponse {
     private String category;
 
     private Float  value;
-
-    @Override
-    public String toString(){
-        return "ServiceItem{"+
-            ", providerName='"+providerName+'\''+
-            ", serviceName='"+serviceName+'\''+
-            ", description='"+serviceDescription+'\''+
-            ", category='"+category+'\''+
-            ", value="+value+
-            '}';
-    }
 
 }

@@ -1,19 +1,24 @@
 package com.example.projetoIntegrado.converter;
 
-import com.example.projetoIntegrado.response.GetServicesResponse;
-import com.example.projetoIntegrado.response.LoginResponse;
-import com.example.projetoIntegrado.usecase.domain.LoginState;
-import domain.ServiceDomain;
+import com.example.projetoIntegrado.response.ServiceResponse;
+import domain.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ServicesConverter {
 
-    public static GetServicesResponse toVo(final List<ServiceDomain> login) {
-        return GetServicesResponse.builder()
-            .serviceResponses(login.stream().map(ServiceConverter::toVo).collect(Collectors.toList()))
-            .build();
+    public static List<ServiceResponse> toVo(final List<Service> login) {
+        return login.stream().map(ServicesConverter::toServiceResponse).collect(Collectors.toList());
+    }
+
+    private static ServiceResponse toServiceResponse(Service service) {
+        ServiceResponse serviceResponse = new ServiceResponse();
+        serviceResponse.setCategory(service.getCategory());
+        serviceResponse.setProviderName(service.getProviderName());
+        serviceResponse.setServiceDescription(service.getServiceDescription());
+        serviceResponse.setValue(service.getValue());
+        return serviceResponse;
     }
 }
 

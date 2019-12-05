@@ -10,14 +10,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ServiceDomain {
+public class Service {
 
     @Id
     private String id;
 
-    private String providerName;
+    private String providerCpf;
 
-    private String cpf;
+    private String providerName;
 
     private String serviceName;
 

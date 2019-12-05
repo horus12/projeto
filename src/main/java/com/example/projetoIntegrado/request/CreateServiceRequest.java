@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class ServiceRequest {
+public class CreateServiceRequest {
 
     @NotEmpty
     @NotNull
@@ -14,6 +14,22 @@ public class ServiceRequest {
 
     @NotEmpty
     @NotNull
+    private String providerName;
+
+    @NotEmpty
+    @NotNull
     private String serviceName;
+
+    @NotEmpty
+    @NotNull
+    private String serviceDescription;
+
+    @NotEmpty
+    @NotNull
+    private String category;
+
+    @NotEmpty
+    @NotNull
+    private Float  value;
 
 }

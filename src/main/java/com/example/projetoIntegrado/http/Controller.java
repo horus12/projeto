@@ -3,20 +3,13 @@ package com.example.projetoIntegrado.http;
 import com.example.projetoIntegrado.converter.LoginConverter;
 import com.example.projetoIntegrado.converter.ServicesConverter;
 import com.example.projetoIntegrado.converter.ValidateCpfConverter;
-import com.example.projetoIntegrado.request.CreateProvider;
-import com.example.projetoIntegrado.request.CreateUser;
-import com.example.projetoIntegrado.request.Login;
-import com.example.projetoIntegrado.request.ServiceRequest;
-import com.example.projetoIntegrado.response.GetServicesResponse;
+import com.example.projetoIntegrado.request.*;
 import com.example.projetoIntegrado.response.LoginResponse;
+import com.example.projetoIntegrado.response.ServiceResponse;
 import com.example.projetoIntegrado.response.ValidateResponse;
 import com.example.projetoIntegrado.usecase.*;
-import domain.Provider;
-import domain.ServiceDomain;
-import domain.User;
-import domain.UserState;
+import domain.*;
 import lombok.Data;
-import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +29,7 @@ public class Controller {
     private final CreateProviderUsecase createProviderUsecase;
     private final ValidateCpfUsecase validateCpfUsecase;
     private final AskForProviderUsecase askForProviderUsecase;
+    private final CreateServiceUsecase createServiceUsecase;
     private final GetServicesUseCase getServicesUseCase;
 
     @PostMapping(value = "/Login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -46,7 +40,7 @@ public class Controller {
 
     @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<HttpStatus> CreateUser(@RequestBody @Valid CreateUser createUser) {
-        User user = null;
+        User user;
         try {
             user = createUserUseCase.execute(createUser);
         } catch (Exception e) {
@@ -83,23 +77,30 @@ public class Controller {
         return new ResponseEntity<>(validateResponse, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/services", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity ServiceRequest(@RequestBody @Valid ServiceRequest serviceRequest) {
-        ServiceDomain service = askForProviderUsecase.execute(serviceRequest);
+    @PostMapping(value = "/service", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> CreateService(@RequestBody @Valid CreateServiceRequest createServiceRequest) {
+        Service service = createServiceUsecase.execute(createServiceRequest);
         if (service == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getServices", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetServicesResponse> GetServices() {
-        List<ServiceDomain> listServices = getServicesUseCase.execute();
-        if (listServices.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PostMapping(value = "/service/{userCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> ServiceRequest(@RequestBody @Valid ServiceRequest serviceRequest, @PathVariable(value = "userCpf") String userCpf) {
+        RequestedService requestedService = askForProviderUsecase.execute(serviceRequest, userCpf);
+        if (requestedService == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-        final GetServicesResponse getServicesResp = ServicesConverter.toVo(listServices);
-        return new ResponseEntity<>(getServicesResp, HttpStatus.OK);
+    @GetMapping(value = "/service", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> GetServices() {
+        List<ServiceResponse> listServices = ServicesConverter.toVo(getServicesUseCase.execute());
+        if (listServices.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(listServices, HttpStatus.OK);
     }
 
 }
