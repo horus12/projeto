@@ -1,14 +1,14 @@
 package com.example.projetoIntegrado.http;
 
 import com.example.projetoIntegrado.converter.LoginConverter;
-import com.example.projetoIntegrado.converter.ServiceConverter;
+import com.example.projetoIntegrado.converter.ServicesConverter;
 import com.example.projetoIntegrado.converter.ValidateCpfConverter;
 import com.example.projetoIntegrado.request.CreateProvider;
 import com.example.projetoIntegrado.request.CreateUser;
 import com.example.projetoIntegrado.request.Login;
 import com.example.projetoIntegrado.request.ServiceRequest;
+import com.example.projetoIntegrado.response.GetServicesResponse;
 import com.example.projetoIntegrado.response.LoginResponse;
-import com.example.projetoIntegrado.response.ServiceResponse;
 import com.example.projetoIntegrado.response.ValidateResponse;
 import com.example.projetoIntegrado.usecase.*;
 import domain.Provider;
@@ -16,12 +16,14 @@ import domain.ServiceDomain;
 import domain.User;
 import domain.UserState;
 import lombok.Data;
+import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/")
@@ -34,6 +36,7 @@ public class Controller {
     private final CreateProviderUsecase createProviderUsecase;
     private final ValidateCpfUsecase validateCpfUsecase;
     private final AskForProviderUsecase askForProviderUsecase;
+    private final GetServicesUseCase getServicesUseCase;
 
     @PostMapping(value = "/Login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LoginResponse Login(@RequestBody Login login) {
@@ -43,14 +46,13 @@ public class Controller {
 
     @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<HttpStatus> CreateUser(@RequestBody @Valid CreateUser createUser) {
-
-         User user= null ;
+        User user = null;
         try {
-              user = createUserUseCase.execute(createUser);
-        }catch(Exception e){
-            if(e.getMessage().equals("user_already_exist"))
+            user = createUserUseCase.execute(createUser);
+        } catch (Exception e) {
+            if (e.getMessage().equals("user_already_exist"))
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
-            if(e.getMessage().equals("invalid_cpf"))
+            if (e.getMessage().equals("invalid_cpf"))
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -82,13 +84,22 @@ public class Controller {
     }
 
     @PostMapping(value = "/services", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity ServiceRequest(@RequestBody ServiceRequest serviceRequest) {
-        final ServiceDomain serviceDomain = ServiceConverter.converter(serviceRequest);
-        ServiceDomain service = askForProviderUsecase.execute(serviceDomain);
+    public ResponseEntity ServiceRequest(@RequestBody @Valid ServiceRequest serviceRequest) {
+        ServiceDomain service = askForProviderUsecase.execute(serviceRequest);
         if (service == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getServices", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GetServicesResponse> GetServices() {
+        List<ServiceDomain> listServices = getServicesUseCase.execute();
+        if (listServices.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        final GetServicesResponse getServicesResp = ServicesConverter.toVo(listServices);
+        return new ResponseEntity<>(getServicesResp, HttpStatus.OK);
     }
 
 }

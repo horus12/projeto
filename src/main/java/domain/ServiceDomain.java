@@ -1,16 +1,30 @@
 package domain;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Document(collection = "services")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ServiceDomain {
 
-    String userName;
-    String providerName;
-    String serviceRequested;
+    @Id
+    private String id;
+
+    private String providerName;
+
+    private String cpf;
+
+    private String serviceName;
+
+    private String serviceDescription;
+
+    private String category;
+
+    private Float  value;
 
 }
