@@ -28,7 +28,6 @@ public class CreateServiceRequest {
     @NotNull
     private String category;
 
-    @NotEmpty
     @NotNull
     private Float  value;
 
