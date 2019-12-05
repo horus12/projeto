@@ -14,10 +14,6 @@ public class CreateServiceRequest {
 
     @NotEmpty
     @NotNull
-    private String providerName;
-
-    @NotEmpty
-    @NotNull
     private String serviceName;
 
     @NotEmpty
