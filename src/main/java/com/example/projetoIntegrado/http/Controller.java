@@ -1,10 +1,12 @@
 package com.example.projetoIntegrado.http;
 
 import com.example.projetoIntegrado.converter.LoginConverter;
+import com.example.projetoIntegrado.converter.RequestedServiceConverter;
 import com.example.projetoIntegrado.converter.ServicesConverter;
 import com.example.projetoIntegrado.converter.ValidateCpfConverter;
 import com.example.projetoIntegrado.request.*;
 import com.example.projetoIntegrado.response.LoginResponse;
+import com.example.projetoIntegrado.response.RequestedServiceResponse;
 import com.example.projetoIntegrado.response.ServiceResponse;
 import com.example.projetoIntegrado.response.ValidateResponse;
 import com.example.projetoIntegrado.usecase.*;
@@ -31,11 +33,13 @@ public class Controller {
     private final AskForProviderUsecase askForProviderUsecase;
     private final CreateServiceUsecase createServiceUsecase;
     private final GetServicesUseCase getServicesUseCase;
+    private final GetProviderServicesDoneUsecase getProviderServicesDoneUsecase;
+    private final GetUserServicesDoneUsecase getUserServicesDoneUsecase;
 
     @PostMapping(value = "/Login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LoginResponse Login(@RequestBody Login login) {
 
-        return LoginConverter.toVo(loginUsecase.execute(login.getUserName(), login.getSenha()));
+        return LoginConverter.toVo(loginUsecase.execute(login.getCpf(), login.getSenha()));
     }
 
     @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -94,6 +98,25 @@ public class Controller {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping(value = "/service/{providerCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> ServiceRequest(@PathVariable(value = "providerCpf") String providerCpf) {
+        List<RequestedServiceResponse> requestedServices = RequestedServiceConverter.toVo(getProviderServicesDoneUsecase.execute(providerCpf));
+        if (requestedServices == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(requestedServices, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/service/{userCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> UserServiceRequest(@PathVariable(value = "userCpf") String userCpf) {
+        List<RequestedServiceResponse> requestedServices = RequestedServiceConverter.toVo(getUserServicesDoneUsecase.execute(userCpf));
+        if (requestedServices == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(requestedServices, HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/service", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> GetServices() {

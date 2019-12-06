@@ -25,11 +25,11 @@ public class LoginUsecase {
     private final UserRepository userRepository;
     private final ProviderRepository providerRepository;
 
-    public LoginState execute(final String name, final String senha) throws NotFoundException {
+    public LoginState execute(String cpf, final String senha) throws NotFoundException {
 
         LoginState loginState = new LoginState();
-
-        Optional<User> userBd = userRepository.findByUserName(name);
+        cpf = sanitize(cpf);
+        Optional<User> userBd = userRepository.findByCpf(cpf);
         if (userBd.isPresent()) {
             loginState.setRole(USER);
             User user = userBd.get();
@@ -41,7 +41,7 @@ public class LoginUsecase {
             else
                 loginState.setUserName(user.getUserName());
         } else {
-            Optional<Provider> providerBd = providerRepository.findByUserName(name);
+            Optional<Provider> providerBd = providerRepository.findByCpf(cpf);
             if (providerBd.isPresent()) {
                 loginState.setRole(PROVIDER);
                 Provider provider = providerBd.get();
@@ -58,6 +58,19 @@ public class LoginUsecase {
             throw new NotFoundException("User not found");
         }
         return loginState;
+    }
+
+    private String sanitize(String cpf) {
+        if (cpf.contains(".")) {
+            cpf = cpf.replace(".", "");
+        }
+        if (cpf.contains("-")) {
+            cpf = cpf.replace("-", "");
+        }
+        if (cpf.contains("/")) {
+            cpf = cpf.replace("/", "");
+        }
+        return cpf;
     }
 
 }

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class Login {
 
         @NotNull
-        private String userName;
+        private String cpf;
 
         @NotNull
         private String senha;
