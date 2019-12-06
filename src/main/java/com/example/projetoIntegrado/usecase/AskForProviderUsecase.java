@@ -22,7 +22,6 @@ public class AskForProviderUsecase {
     private final ServiceRepository serviceRepository;
     private final RequestedServiceRepository requestedServiceRepository;
 
-
     public RequestedService execute(ServiceRequest request, String userCpf) {
 
         Optional<Provider> provider = providerRepository.findByCpf(request.getProviderCpf());

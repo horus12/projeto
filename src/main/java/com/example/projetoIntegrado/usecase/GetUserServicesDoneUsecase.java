@@ -12,7 +12,7 @@ public class GetUserServicesDoneUsecase {
 
     private final RequestedServiceRepository requestedServiceRepository;
 
-    public List<RequestedService> execute (final String userCpf) {
-        return requestedServiceRepository.findAllByCpf(userCpf);
+    public List<RequestedService> execute(final String userCpf) {
+        return requestedServiceRepository.findAllByUserCpf(userCpf);
     }
 }

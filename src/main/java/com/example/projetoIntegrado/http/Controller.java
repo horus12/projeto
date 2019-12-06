@@ -91,7 +91,7 @@ public class Controller {
     }
 
     @PostMapping(value = "/service/{userCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> ServiceRequest(@RequestBody @Valid ServiceRequest serviceRequest, @PathVariable(value = "userCpf") String userCpf) {
+    public ResponseEntity<?> requestAService(@RequestBody @Valid ServiceRequest serviceRequest, @PathVariable(value = "userCpf") String userCpf) {
         RequestedService requestedService = askForProviderUsecase.execute(serviceRequest, userCpf);
         if (requestedService == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -99,17 +99,17 @@ public class Controller {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/service/{providerCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> ServiceRequest(@PathVariable(value = "providerCpf") String providerCpf) {
+    @GetMapping(value = "/service/provider/{providerCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllServicesFromProvider(@PathVariable(value = "providerCpf") String providerCpf) {
         List<RequestedServiceResponse> requestedServices = RequestedServiceConverter.toVo(getProviderServicesDoneUsecase.execute(providerCpf));
-        if (requestedServices == null) {
+        if (requestedServices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(requestedServices, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/service/{userCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> UserServiceRequest(@PathVariable(value = "userCpf") String userCpf) {
+    @GetMapping(value = "/service/user/{userCpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllServicesFromUser(@PathVariable(value = "userCpf") String userCpf) {
         List<RequestedServiceResponse> requestedServices = RequestedServiceConverter.toVo(getUserServicesDoneUsecase.execute(userCpf));
         if (requestedServices == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

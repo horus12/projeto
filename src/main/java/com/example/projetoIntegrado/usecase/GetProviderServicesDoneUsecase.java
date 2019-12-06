@@ -13,6 +13,6 @@ public class GetProviderServicesDoneUsecase {
     private final RequestedServiceRepository requestedServiceRepository;
 
     public List<RequestedService> execute (final String providerCpf) {
-        return requestedServiceRepository.findAllByCpf(providerCpf);
+        return requestedServiceRepository.findAllByProviderCpf(providerCpf);
     }
 }

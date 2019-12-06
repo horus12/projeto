@@ -14,8 +14,10 @@ public class ServicesConverter {
 
     private static ServiceResponse toServiceResponse(Service service) {
         ServiceResponse serviceResponse = new ServiceResponse();
+        serviceResponse.setProviderCpf(service.getProviderCpf());
         serviceResponse.setCategory(service.getCategory());
         serviceResponse.setProviderName(service.getProviderName());
+        serviceResponse.setServiceName(service.getServiceName());
         serviceResponse.setServiceDescription(service.getServiceDescription());
         serviceResponse.setValue(service.getValue());
         return serviceResponse;

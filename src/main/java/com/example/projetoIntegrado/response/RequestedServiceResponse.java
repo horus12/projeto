@@ -8,10 +8,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class RequestedServiceResponse {
 
     private String userCpf;
+
+    private String providerCpf;
 
     private String serviceName;
 

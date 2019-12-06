@@ -1,6 +1,5 @@
 package com.example.projetoIntegrado.converter;
 
-import com.example.projetoIntegrado.request.ServiceRequest;
 import com.example.projetoIntegrado.response.RequestedServiceResponse;
 import domain.RequestedService;
 
@@ -16,8 +15,10 @@ public class RequestedServiceConverter {
     private static RequestedServiceResponse toServiceRequestResponse(RequestedService requestedService) {
         RequestedServiceResponse requestedServiceResponse = new RequestedServiceResponse();
         requestedServiceResponse.setUserCpf(requestedService.getUserCpf());
+        requestedServiceResponse.setProviderCpf(requestedService.getProviderCpf());
         requestedServiceResponse.setCategory(requestedService.getCategory());
         requestedServiceResponse.setServiceDescription(requestedService.getServiceDescription());
+        requestedServiceResponse.setServiceName(requestedService.getServiceName());
         requestedServiceResponse.setValue(requestedService.getValue());
         return requestedServiceResponse;
     }
