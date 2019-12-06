@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:164334a@ds253398.mlab.com:53398/projetod
+
+server:
+  port: 8080
