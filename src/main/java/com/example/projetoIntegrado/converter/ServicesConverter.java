@@ -16,6 +16,7 @@ public class ServicesConverter {
         ServiceResponse serviceResponse = new ServiceResponse();
         serviceResponse.setProviderCpf(service.getProviderCpf());
         serviceResponse.setCategory(service.getCategory());
+        serviceResponse.setServiceName(service.getServiceName());
         serviceResponse.setProviderName(service.getProviderName());
         serviceResponse.setServiceName(service.getServiceName());
         serviceResponse.setServiceDescription(service.getServiceDescription());

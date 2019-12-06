@@ -14,6 +14,8 @@ public class RequestedServiceResponse {
 
     private String providerCpf;
 
+    private String providerName;
+
     private String serviceName;
 
     private String serviceDescription;

@@ -33,6 +33,7 @@ public class AskForProviderUsecase {
         final RequestedService requestedService = new RequestedService();
         requestedService.setCategory(service.get().getCategory());
         requestedService.setProviderCpf(provider.get().getCpf());
+        requestedService.setProviderName(provider.get().getUserName());
         requestedService.setServiceDescription(service.get().getServiceDescription());
         requestedService.setServiceName(service.get().getServiceName());
         requestedService.setUserCpf(userCpf);

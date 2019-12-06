@@ -17,6 +17,8 @@ public class RequestedService {
 
     private String providerCpf;
 
+    private String providerName;
+
     private String serviceName;
 
     private String serviceDescription;

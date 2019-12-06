@@ -16,6 +16,7 @@ public class RequestedServiceConverter {
         RequestedServiceResponse requestedServiceResponse = new RequestedServiceResponse();
         requestedServiceResponse.setUserCpf(requestedService.getUserCpf());
         requestedServiceResponse.setProviderCpf(requestedService.getProviderCpf());
+        requestedServiceResponse.setProviderName(requestedService.getProviderName());
         requestedServiceResponse.setCategory(requestedService.getCategory());
         requestedServiceResponse.setServiceDescription(requestedService.getServiceDescription());
         requestedServiceResponse.setServiceName(requestedService.getServiceName());
