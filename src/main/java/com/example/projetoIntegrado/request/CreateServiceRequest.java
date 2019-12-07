@@ -18,6 +18,10 @@ public class CreateServiceRequest {
 
     @NotEmpty
     @NotNull
+    private String providerName;
+    
+    @NotEmpty
+    @NotNull
     private String serviceDescription;
 
     @NotEmpty
@@ -25,6 +29,6 @@ public class CreateServiceRequest {
     private String category;
 
     @NotNull
-    private Float  value;
+    private Float value;
 
 }
