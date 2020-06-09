@@ -29,10 +29,12 @@ public class CreateProviderUsecase {
         Assert.hasText(request.getRg(), "RG should not be null or empty");
         Assert.hasText(request.getSenha(), "Password should not be null or empty");
 
-        if (validateCpfUsecase.execute(request.getCpf()) != UserState.VALID)
-            throw new IllegalArgumentException("invalid cpf");
+//        if (validateCpfUsecase.execute(request.getCpf()) != UserState.VALID)
+//            throw new IllegalArgumentException("invalid cpf");
+//
+//        String cpf = validateCpfUsecase.removeCaracteresEspeciais(request.getCpf());
 
-        String cpf = validateCpfUsecase.removeCaracteresEspeciais(request.getCpf());
+        String cpf = request.getCpf();
 
         Optional<Provider> provider = providerRepository.findByCpf(cpf);
         if (provider.isPresent()) throw new ExeceptionUserAlreadyRegister("user already exist");

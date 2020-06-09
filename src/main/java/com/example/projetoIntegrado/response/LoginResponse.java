@@ -16,11 +16,14 @@ public class LoginResponse {
 
     private UserRole role;
 
+    private String name;
+
     @Override
     public String toString() {
         return "Login{" +
                 "id='" + id +
                 "role='"+ role +
+                "name='"+ name +
                 '}';
     }
 
